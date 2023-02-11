@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   Column,
   DataType,
@@ -8,15 +9,18 @@ import {
   Table,
 } from 'sequelize-typescript';
 
-@Table({ tableName: 'actors' })
+@Table({
+  tableName: 'actors',
+  timestamps: true,
+  paranoid: true,
+})
 export default class Actor extends Model {
-  @NotEmpty
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
   id: string;
 
   @NotEmpty
-  @Column(DataType.STRING)
+  @Column(DataType.STRING(50))
   name: string;
 }

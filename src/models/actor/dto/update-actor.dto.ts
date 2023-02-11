@@ -1,5 +1,5 @@
 import { CreateActorDto } from './create-actor.dto';
 
-export class EditActorDto extends CreateActorDto {
+export class UpdateActorDto extends CreateActorDto {
   id: string;
 }
