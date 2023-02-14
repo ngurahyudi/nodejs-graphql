@@ -47,7 +47,7 @@ export class ActorService {
   /**
    * It updates the actor with the given id with the given params
    * @param {string} id - The id of the actor to be edited
-   * @param {UpdateActorDto} params - EditActorDto
+   * @param {UpdateActorDto} params - UpdateActorDto
    * @returns The number of rows affected by the update.
    */
   async update(id: string, params: UpdateActorDto) {

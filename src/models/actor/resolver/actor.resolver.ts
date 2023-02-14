@@ -1,5 +1,4 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from 'type-graphql';
-import { AppContext } from '../../../common/interfaces';
 import { ActorService } from '../actor.service';
 import { CreateActorInput, ActorObjectType, UpdateActorInput } from '../type';
 
