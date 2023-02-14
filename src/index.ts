@@ -1,15 +1,19 @@
-import express, { Express, Request, Response } from 'express';
-import { graphqlHTTP } from 'express-graphql';
-import { buildSchema } from 'type-graphql';
 import configs from './configs/configurations';
+import cookieParser from 'cookie-parser';
+import express, { Express, Request, Response } from 'express';
+import path from 'path';
+import { authChecker } from './helpers';
+import { buildSchema } from 'type-graphql';
+import { graphqlHTTP } from 'express-graphql';
 import { sequelize } from './configs/db.config';
-import { ActorResolver } from './models/actor/resolver/actor.resolver';
 
 const app: Express = express();
 
+app.use(cookieParser());
+
 const APP_PORT = configs.APP_PORT;
 
-(async () => {
+async function startServer() {
   try {
     await sequelize.sync({
       // force: true,
@@ -24,17 +28,35 @@ const APP_PORT = configs.APP_PORT;
     // })
     // .then((res) => console.log(res));
 
-    app.use(
-      '/graphql',
-      // Creates a GraphQLHTTP per request
-      graphqlHTTP({
-        schema: await buildSchema({
-          resolvers: [ActorResolver],
-          validate: true,
+    const schema = await buildSchema({
+      resolvers: [
+        path.join(__dirname, './models/**/resolver/*.resolver.{ts,js}'),
+      ],
+      validate: true,
+      emitSchemaFile: path.resolve(__dirname, 'snapshots/schema', 'schema.gql'),
+      authChecker,
+    });
+
+    const endpoints = [
+      { path: '/graphql', graphiql: false },
+      { path: '/graphiql', graphiql: true },
+    ];
+
+    endpoints.forEach((endpoint) => {
+      app.use(
+        endpoint.path,
+        graphqlHTTP((req: Request, res: Response) => {
+          return {
+            schema,
+            context: {
+              req,
+              res,
+            },
+            graphiql: endpoint.graphiql,
+          };
         }),
-        graphiql: true,
-      }),
-    );
+      );
+    });
 
     app.listen(APP_PORT, () => {
       console.log(
@@ -45,4 +67,6 @@ const APP_PORT = configs.APP_PORT;
     console.log(error);
     process.exit(1);
   }
-})();
+}
+
+startServer();

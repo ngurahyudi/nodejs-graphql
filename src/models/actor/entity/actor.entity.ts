@@ -23,4 +23,7 @@ export default class Actor extends Model {
   @NotEmpty
   @Column(DataType.STRING(50))
   name: string;
+
+  @Column(DataType.DATE)
+  deletedAt?: Date;
 }

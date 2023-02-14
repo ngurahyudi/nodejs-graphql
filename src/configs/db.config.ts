@@ -9,7 +9,7 @@ export const sequelize = new Sequelize({
   database: configs.DB_DATABASE,
   username: configs.DB_USERNAME,
   password: configs.DB_PASSWORD,
-  models: [path.join(__dirname, '../models/**/*.entity.ts')],
+  models: [path.join(__dirname, '../models/**/*.entity.{ts,js}')],
   modelMatch: (filename, member) => {
     return (
       filename.substring(0, filename.indexOf('.entity')) ===

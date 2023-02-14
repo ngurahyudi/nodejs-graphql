@@ -1,5 +1,4 @@
-import { CreateActorDto } from './dto/create-actor.dto';
-import { UpdateActorDto } from './dto/update-actor.dto';
+import { CreateActorDto, UpdateActorDto } from './dto';
 import Actor from './entity/actor.entity';
 
 export class ActorService {

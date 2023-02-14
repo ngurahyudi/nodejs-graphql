@@ -11,6 +11,12 @@ const configs = {
   // App configurations
   APP_PORT: process.env.APP_PORT || 3000,
 
+  APP_ACCESS_TOKEN_SECRET: process.env.APP_ACCESS_TOKEN_SECRET,
+  APP_ACCESS_TOKEN_EXP: process.env.APP_ACCESS_TOKEN_EXP,
+
+  APP_REFRESH_TOKEN_SECRET: process.env.APP_REFRESH_TOKEN_SECRET,
+  APP_REFRESH_TOKEN_EXP: process.env.APP_REFRESH_TOKEN_EXP,
+
   // Database configurations
   DB_HOST: process.env.DB_HOST || 'localhost',
   DB_PORT: process.env.DB_PORT || 5432,
