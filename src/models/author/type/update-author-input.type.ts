@@ -1,8 +1,14 @@
+import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
 import { Field, ID, InputType } from 'type-graphql';
-import CreateAuthorInput from './create-author-input.type';
 
 @InputType()
-export default class UpdateAuthorInput extends CreateAuthorInput {
+export default class UpdateAuthorInput {
   @Field((type) => ID)
   id: string;
+
+  @Field({ nullable: false, description: 'Name of the author' })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(50)
+  name: string;
 }

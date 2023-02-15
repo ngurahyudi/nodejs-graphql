@@ -1,5 +1,6 @@
-import { AuthorService } from '../author.service';
 import Author from '../entity/author.entity';
+import Movie from '../../movie/entity/movie.entity';
+import { AuthorService } from '../author.service';
 import { authorStub } from './stub/author.stub';
 
 jest.mock('../entity/author.entity');
@@ -22,6 +23,12 @@ describe('list authors', () => {
 
   it('should call findAll method', async () => {
     expect(Author.findAll).toHaveBeenCalled();
+  });
+
+  it('should call findAll method with correct parameters', () => {
+    expect(Author.findAll).toHaveBeenCalledWith({
+      include: [Movie],
+    });
   });
 
   it('should return list of authors', async () => {
@@ -63,6 +70,7 @@ describe('find author', () => {
       where: {
         id: 'some-author-id',
       },
+      include: [Movie],
     });
   });
 
@@ -99,7 +107,10 @@ describe('add author', () => {
   });
 
   it('should call create method with correct parameters', () => {
-    expect(Author.create).toHaveBeenCalledWith({ ...authorStub() });
+    expect(Author.create).toHaveBeenCalledWith(
+      { ...authorStub() },
+      { include: [Movie] },
+    );
   });
 
   it('should return created author object with id', () => {
@@ -144,11 +155,8 @@ describe('update author', () => {
     );
   });
 
-  it('should return author data if update process succeeded', () => {
-    expect(result).toStrictEqual({
-      id: 'some-author-id',
-      ...authorStub(),
-    });
+  it('should return true if update process succeeded', () => {
+    expect(result).toBeTruthy();
   });
 
   it('should return error if the author data to be updated is not found', async () => {

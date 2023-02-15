@@ -1,3 +1,4 @@
+import Movie from '../movie/entity/movie.entity';
 import { CreateAuthorDto, UpdateAuthorDto } from './dto';
 import Author from './entity/author.entity';
 
@@ -8,7 +9,7 @@ export class AuthorService {
    */
   async find() {
     try {
-      return await Author.findAll();
+      return await Author.findAll({ include: [Movie] });
     } catch (error) {
       throw new Error(error);
     }
@@ -21,7 +22,7 @@ export class AuthorService {
    */
   async findOne(id: string) {
     try {
-      const author = await Author.findOne({ where: { id } });
+      const author = await Author.findOne({ where: { id }, include: [Movie] });
 
       if (!author) throw 'data not found';
 
@@ -38,17 +39,17 @@ export class AuthorService {
    */
   async add(params: CreateAuthorDto) {
     try {
-      return await Author.create({ ...params });
+      return await Author.create({ ...params }, { include: [Movie] });
     } catch (error) {
       throw new Error(error);
     }
   }
 
   /**
-   * It updates the author with the given id with the given params
-   * @param {string} id - The id of the author to be edited
+   * It updates the author's data based on the id and the params passed to the function
+   * @param {string} id - string - The id of the author to update
    * @param {UpdateAuthorDto} params - UpdateAuthorDto
-   * @returns The number of rows affected by the update.
+   * @returns The result of the update query.
    */
   async update(id: string, params: UpdateAuthorDto) {
     try {
@@ -56,10 +57,7 @@ export class AuthorService {
 
       if (result[0] === 0) throw 'data not found';
 
-      return {
-        id,
-        ...params,
-      };
+      return true;
     } catch (error) {
       throw new Error(error);
     }

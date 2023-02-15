@@ -1,8 +1,9 @@
-import 'reflect-metadata';
-import { ActorService } from '../actor.service';
-import { ActorResolver } from '../resolver/actor.resolver';
-import { actorStub } from './stub/actor.stub';
 import Actor from '../entity/actor.entity';
+import { ActorResolver } from '../resolver/actor.resolver';
+import { ActorService } from '../actor.service';
+import { actorStub } from './stub/actor.stub';
+import { CreateActorInput } from '../type';
+import 'reflect-metadata';
 
 jest.mock('../actor.service.ts');
 
@@ -93,7 +94,9 @@ describe('add actor', () => {
       name: actorStub().name,
     } as unknown as Actor);
 
-    result = await actorResolver.addActor({ ...actorStub() });
+    result = await actorResolver.addActor({
+      ...actorStub(),
+    } as CreateActorInput);
   });
 
   it('should call add method', () => {
@@ -118,10 +121,7 @@ describe('update actor', () => {
   let result = {};
 
   beforeEach(async () => {
-    jest.spyOn(actorResolver.actorService, 'update').mockResolvedValue({
-      id: 'actor-id',
-      name: actorStub().name,
-    });
+    jest.spyOn(actorResolver.actorService, 'update').mockResolvedValue(true);
 
     result = await actorResolver.updateActor('some-actor-id', {
       ...actorStub(),
@@ -140,11 +140,8 @@ describe('update actor', () => {
     });
   });
 
-  it(`should return appropriate results`, () => {
-    expect(result).toStrictEqual({
-      id: 'actor-id',
-      name: actorStub().name,
-    });
+  it(`should return true if update process succeeded`, () => {
+    expect(result).toBeTruthy();
   });
 });
 

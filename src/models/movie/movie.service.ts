@@ -1,5 +1,7 @@
-import { CreateMovieDto, UpdateMovieDto } from './dto';
+import Actor from '../actor/entity/actor.entity';
+import Author from '../author/entity/author.entity';
 import Movie from './entity/movie.entity';
+import { CreateMovieDto, UpdateMovieDto } from './dto';
 
 export class MovieService {
   /**
@@ -8,7 +10,7 @@ export class MovieService {
    */
   async find() {
     try {
-      return await Movie.findAll();
+      return await Movie.findAll({ include: [Author, Actor] });
     } catch (error) {
       throw new Error(error);
     }
@@ -21,7 +23,10 @@ export class MovieService {
    */
   async findOne(id: string) {
     try {
-      const movie = await Movie.findOne({ where: { id } });
+      const movie = await Movie.findOne({
+        where: { id },
+        include: [Author, Actor],
+      });
 
       if (!movie) throw 'data not found';
 
@@ -38,7 +43,7 @@ export class MovieService {
    */
   async add(params: CreateMovieDto) {
     try {
-      return await Movie.create({ ...params });
+      return await Movie.create({ ...params }, { include: [Author, Actor] });
     } catch (error) {
       throw new Error(error);
     }
@@ -56,10 +61,7 @@ export class MovieService {
 
       if (result[0] === 0) throw 'data not found';
 
-      return {
-        id,
-        ...params,
-      };
+      return true;
     } catch (error) {
       throw new Error(error);
     }

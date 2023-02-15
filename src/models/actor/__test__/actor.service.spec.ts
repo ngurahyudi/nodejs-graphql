@@ -1,8 +1,10 @@
-import { ActorService } from '../actor.service';
 import Actor from '../entity/actor.entity';
+import Movie from '../../movie/entity/movie.entity';
+import { ActorService } from '../actor.service';
 import { actorStub } from './stub/actor.stub';
 
 jest.mock('../entity/actor.entity');
+jest.mock('../../movie/entity/movie.entity');
 
 const actorService = new ActorService();
 
@@ -22,6 +24,12 @@ describe('list actors', () => {
 
   it('should call findAll method', async () => {
     expect(Actor.findAll).toHaveBeenCalled();
+  });
+
+  it('should call findAll method with correct parameters', () => {
+    expect(Actor.findAll).toHaveBeenCalledWith({
+      include: [Movie],
+    });
   });
 
   it('should return list of actors', async () => {
@@ -61,6 +69,7 @@ describe('find actor', () => {
       where: {
         id: 'some-actor-id',
       },
+      include: [Movie],
     });
   });
 
@@ -97,7 +106,10 @@ describe('add actor', () => {
   });
 
   it('should call create method with correct parameters', () => {
-    expect(Actor.create).toHaveBeenCalledWith({ ...actorStub() });
+    expect(Actor.create).toHaveBeenCalledWith(
+      { ...actorStub() },
+      { include: [Movie] },
+    );
   });
 
   it('should return created actor object with id', () => {
@@ -142,11 +154,8 @@ describe('update actor', () => {
     );
   });
 
-  it('should return actor data if update process succeeded', () => {
-    expect(result).toStrictEqual({
-      id: 'some-actor-id',
-      ...actorStub(),
-    });
+  it('should return true if update process succeeded', () => {
+    expect(result).toBeTruthy();
   });
 
   it('should return error if the actor data to be updated is not found', async () => {

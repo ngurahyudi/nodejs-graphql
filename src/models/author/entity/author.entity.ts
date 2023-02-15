@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import {
+  BelongsToMany,
   Column,
   DataType,
   Default,
@@ -8,6 +9,8 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import Movie from '../../movie/entity/movie.entity';
+import MovieAuthor from '../../movie-author/entity/movie-author.entity';
 
 @Table({
   tableName: 'authors',
@@ -26,4 +29,7 @@ export default class Author extends Model {
 
   @Column(DataType.DATE)
   deletedAt?: Date;
+
+  @BelongsToMany(() => Movie, () => MovieAuthor)
+  movies: Movie[];
 }

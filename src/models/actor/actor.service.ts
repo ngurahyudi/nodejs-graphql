@@ -1,5 +1,6 @@
-import { CreateActorDto, UpdateActorDto } from './dto';
 import Actor from './entity/actor.entity';
+import Movie from '../movie/entity/movie.entity';
+import { CreateActorDto, UpdateActorDto } from './dto';
 
 export class ActorService {
   /**
@@ -8,7 +9,7 @@ export class ActorService {
    */
   async find() {
     try {
-      return await Actor.findAll();
+      return await Actor.findAll({ include: [Movie] });
     } catch (error) {
       throw new Error(error);
     }
@@ -21,7 +22,7 @@ export class ActorService {
    */
   async findOne(id: string) {
     try {
-      const actor = await Actor.findOne({ where: { id } });
+      const actor = await Actor.findOne({ where: { id }, include: [Movie] });
 
       if (!actor) throw 'data not found';
 
@@ -38,17 +39,17 @@ export class ActorService {
    */
   async add(params: CreateActorDto) {
     try {
-      return await Actor.create({ ...params });
+      return await Actor.create({ ...params }, { include: [Movie] });
     } catch (error) {
       throw new Error(error);
     }
   }
 
   /**
-   * It updates the actor with the given id with the given params
-   * @param {string} id - The id of the actor to be edited
+   * It updates the actor's data based on the id and the params passed to the function
+   * @param {string} id - string - The id of the actor to update
    * @param {UpdateActorDto} params - UpdateActorDto
-   * @returns The number of rows affected by the update.
+   * @returns The result of the update query.
    */
   async update(id: string, params: UpdateActorDto) {
     try {
@@ -56,10 +57,7 @@ export class ActorService {
 
       if (result[0] === 0) throw 'data not found';
 
-      return {
-        id,
-        ...params,
-      };
+      return true;
     } catch (error) {
       throw new Error(error);
     }

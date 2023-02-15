@@ -113,10 +113,10 @@ export class UserService {
   }
 
   /**
-   * It updates the user with the given id with the given params
-   * @param {string} id - The id of the user to be edited
+   * It updates the user's data based on the id and the params passed to the function
+   * @param {string} id - string - The id of the user to update
    * @param {UpdateUserDto} params - UpdateUserDto
-   * @returns The number of rows affected by the update.
+   * @returns The result of the update query.
    */
   async update(id: string, params: UpdateUserDto) {
     try {

@@ -2,14 +2,12 @@ import {
   IsString,
   MaxLength,
   Matches,
-  ArrayMinSize,
   IsEmail,
   Length,
   IsArray,
 } from 'class-validator';
 import { Field, ID, InputType } from 'type-graphql';
 import { RoleEnum } from '../enums';
-// import SignupUserInput from './signup-user-input.type';
 
 @InputType()
 export default class UpdateUserInput {

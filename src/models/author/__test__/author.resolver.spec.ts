@@ -1,8 +1,9 @@
-import 'reflect-metadata';
-import { AuthorService } from '../author.service';
-import { AuthorResolver } from '../resolver/author.resolver';
-import { authorStub } from './stub/author.stub';
 import Author from '../entity/author.entity';
+import { AuthorResolver } from '../resolver/author.resolver';
+import { AuthorService } from '../author.service';
+import { authorStub } from './stub/author.stub';
+import 'reflect-metadata';
+import { CreateAuthorInput } from '../type';
 
 jest.mock('../author.service.ts');
 
@@ -93,7 +94,9 @@ describe('add author', () => {
       name: authorStub().name,
     } as unknown as Author);
 
-    result = await authorResolver.addAuthor({ ...authorStub() });
+    result = await authorResolver.addAuthor({
+      ...authorStub(),
+    } as CreateAuthorInput);
   });
 
   it('should call add method', () => {
@@ -118,10 +121,7 @@ describe('update author', () => {
   let result = {};
 
   beforeEach(async () => {
-    jest.spyOn(authorResolver.authorService, 'update').mockResolvedValue({
-      id: 'author-id',
-      name: authorStub().name,
-    });
+    jest.spyOn(authorResolver.authorService, 'update').mockResolvedValue(true);
 
     result = await authorResolver.updateAuthor('some-author-id', {
       ...authorStub(),
@@ -140,11 +140,8 @@ describe('update author', () => {
     });
   });
 
-  it(`should return appropriate results`, () => {
-    expect(result).toStrictEqual({
-      id: 'author-id',
-      name: authorStub().name,
-    });
+  it(`should return true if update process succeeded`, () => {
+    expect(result).toBeTruthy();
   });
 });
 

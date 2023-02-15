@@ -1,5 +1,13 @@
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { Field, InputType } from 'type-graphql';
+import { CreateActorInput } from '../../actor/type';
+import { CreateAuthorInput } from '../../author/type';
 
 @InputType()
 export default class CreateMovieInput {
@@ -8,4 +16,20 @@ export default class CreateMovieInput {
   @IsNotEmpty()
   @MaxLength(50)
   name: string;
+
+  @Field((type) => [CreateAuthorInput], {
+    nullable: true,
+    description: `Movie's authors`,
+  })
+  @IsOptional()
+  @IsArray()
+  authors: CreateAuthorInput[];
+
+  @Field((type) => [CreateActorInput], {
+    nullable: true,
+    description: `Movie's actors`,
+  })
+  @IsOptional()
+  @IsArray()
+  actors: CreateActorInput[];
 }

@@ -3,6 +3,7 @@ import { MovieService } from '../movie.service';
 import { MovieResolver } from '../resolver/movie.resolver';
 import { movieStub } from './stub/movie.stub';
 import Movie from '../entity/movie.entity';
+import { CreateMovieInput, UpdateMovieInput } from '../type';
 
 jest.mock('../movie.service.ts');
 
@@ -93,7 +94,9 @@ describe('add movie', () => {
       name: movieStub().name,
     } as unknown as Movie);
 
-    result = await movieResolver.addMovie({ ...movieStub() });
+    result = await movieResolver.addMovie({
+      ...movieStub(),
+    } as CreateMovieInput);
   });
 
   it('should call add method', () => {
@@ -118,15 +121,12 @@ describe('update movie', () => {
   let result = {};
 
   beforeEach(async () => {
-    jest.spyOn(movieResolver.movieService, 'update').mockResolvedValue({
-      id: 'movie-id',
-      name: movieStub().name,
-    });
+    jest.spyOn(movieResolver.movieService, 'update').mockResolvedValue(true);
 
     result = await movieResolver.updateMovie('some-movie-id', {
       ...movieStub(),
       id: 'some-movie-id',
-    });
+    } as UpdateMovieInput);
   });
 
   it('should call update method', () => {
@@ -140,11 +140,8 @@ describe('update movie', () => {
     });
   });
 
-  it(`should return appropriate results`, () => {
-    expect(result).toStrictEqual({
-      id: 'movie-id',
-      name: movieStub().name,
-    });
+  it(`should return true if update process succeeded`, () => {
+    expect(result).toBeTruthy();
   });
 });
 
