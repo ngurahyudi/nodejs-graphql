@@ -11,7 +11,7 @@ export class ActorResolver {
   }
 
   /* This is a query that takes in no arguments and returns an array of ActorObjectType. */
-  @Authorized('ADMIN')
+  // @Authorized('ADMIN')
   @Query(() => [ActorObjectType])
   async getActors() {
     return await this.actorService.find();
