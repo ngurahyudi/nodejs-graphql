@@ -2,7 +2,9 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({
-  path: path.resolve(`${process.cwd()}/src/configs/env/.env`),
+  path: path.resolve(
+    `${process.cwd()}/src/configs/env/.env.${process.env.NODE_ENV}`,
+  ),
 });
 
 const configs = {
