@@ -69,7 +69,7 @@ export default class User extends Model {
   @BeforeCreate
   @BeforeUpdate
   static async encryptRefreshToken(user: User) {
-    if (user.changed('refreshToken')) {
+    if (user.changed('refreshToken') && user.get('refreshToken') !== null) {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(user.get('refreshToken'), salt);
 

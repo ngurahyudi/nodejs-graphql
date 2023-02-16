@@ -8,6 +8,10 @@ jest.mock('../entity/movie.entity');
 
 const movieService = new MovieService();
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('list movies', () => {
   let result = {};
 

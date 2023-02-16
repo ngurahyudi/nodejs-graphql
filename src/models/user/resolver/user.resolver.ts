@@ -36,6 +36,11 @@ export class UserResolver {
     return this.userService.signOut(ctx);
   }
 
+  @Query(() => SignInResponseType)
+  async refreshAccessToken(@Ctx() ctx: AppContext) {
+    return this.userService.refreshAccessToken(ctx);
+  }
+
   /* This is a mutation that takes in an argument of type SignupUserInput and returns an
 UserObjectType. */
   @Mutation(() => UserObjectType)
@@ -49,6 +54,7 @@ UserObjectType. */
     return this.userService.signIn(params, ctx);
   }
 
+  /* This is a mutation that takes in an argument of type string and returns a boolean. */
   @Mutation((returns) => Boolean)
   async updateUser(
     @Arg('id') id: string,

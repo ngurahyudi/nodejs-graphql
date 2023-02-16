@@ -23,6 +23,10 @@ const mockDelete = jest.fn();
   };
 });
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('list movies', () => {
   const movieResolver = new MovieResolver();
 

@@ -7,6 +7,10 @@ jest.mock('../entity/author.entity');
 
 const authorService = new AuthorService();
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('list authors', () => {
   let result = {};
 

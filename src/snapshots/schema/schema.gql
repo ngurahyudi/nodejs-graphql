@@ -87,6 +87,7 @@ type Query {
   getAuthors: [AuthorObjectType!]!
   getMovies: [MovieObjectType!]!
   getUsers: [UserObjectType!]!
+  refreshAccessToken: SignInResponseType!
   signOut: Boolean!
 }
 

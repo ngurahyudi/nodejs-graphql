@@ -23,6 +23,10 @@ const mockDelete = jest.fn();
   };
 });
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('list actors', () => {
   const actorResolver = new ActorResolver();
 

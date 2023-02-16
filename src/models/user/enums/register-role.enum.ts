@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { registerEnumType } from 'type-graphql';
 import { RoleEnum } from './role.enum';
 

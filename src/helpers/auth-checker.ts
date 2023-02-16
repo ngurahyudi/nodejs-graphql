@@ -35,7 +35,7 @@ export const authChecker: AuthChecker<AppContext> = async (
   const user = await userService.findOne(userId);
 
   if (!user) {
-    throw 'user longer exist';
+    throw 'user no longer exist';
   }
 
   // Assign userId into context

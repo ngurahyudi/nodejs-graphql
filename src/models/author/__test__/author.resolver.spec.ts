@@ -23,6 +23,10 @@ const mockDelete = jest.fn();
   };
 });
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 describe('list authors', () => {
   const authorResolver = new AuthorResolver();
 

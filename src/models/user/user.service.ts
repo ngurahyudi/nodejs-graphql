@@ -150,14 +150,99 @@ export class UserService {
     }
   }
 
+  /**
+   * It removes the refresh token from the database and clears the cookies from the browser
+   * @param {AppContext}  - AppContext - This is the context object that is passed to the resolver. It
+   * contains the request, response, and userId.
+   * @returns A boolean value
+   */
   async signOut({ res, userId }: AppContext) {
     try {
+      // remove refresh token from database
+      await this.update(userId, {
+        id: userId,
+        refreshToken: null,
+      });
+
       // Logout user
       res.cookie('access_token', '', { maxAge: -1 });
       res.cookie('refresh_token', '', { maxAge: -1 });
       res.cookie('logged_in', '', { maxAge: -1 });
 
       return true;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  /**
+   * It takes in a userId, finds the user in the database, verifies the refresh token, and returns a
+   * new access token
+   * @param {AppContext}  - AppContext - this is the context object that is passed to the resolver
+   * function. It contains the request, response, and userId.
+   */
+  async refreshAccessToken({ req, res, userId }: AppContext) {
+    try {
+      const errorMessage = 'no refresh token found';
+
+      let refreshToken = '';
+
+      if (req.cookies?.refresh_token) {
+        const { refresh_token: token } = req.cookies;
+        refreshToken = token;
+      }
+
+      if (!refreshToken) throw errorMessage;
+
+      const decoded = jwt.verify(refreshToken, this.REFRESH_TOKEN_SECRET);
+
+      if (!decoded) throw 'invalid refresh token';
+
+      const user = await this.findOne(userId);
+
+      if (!user) {
+        throw 'user no longer exist';
+      }
+
+      // verify refresh token with hashed token in the database
+      const isTokenValid = await bcrypt.compare(
+        refreshToken,
+        user.refreshToken,
+      );
+
+      if (!isTokenValid) throw errorMessage;
+
+      const { access_token, refresh_token } = this.signToken({
+        id: user.id,
+        roles: user.roles,
+      });
+
+      // save refresh token into database
+      await this.update(user.id, {
+        id: user.id,
+        refreshToken: refresh_token,
+      });
+
+      res.cookie('access_token', access_token, {
+        maxAge: +this.ACCESS_TOKEN_EXP * 60 * 1000,
+        expires: new Date(Date.now() + +this.ACCESS_TOKEN_EXP * 60 * 1000),
+      });
+
+      res.cookie('refresh_token', refresh_token, {
+        maxAge: +this.REFRESH_TOKEN_EXP * 60 * 1000,
+        expires: new Date(Date.now() + +this.REFRESH_TOKEN_EXP * 60 * 1000),
+      });
+
+      res.cookie('logged_in', 'true', {
+        maxAge: +this.ACCESS_TOKEN_EXP * 60 * 1000,
+        expires: new Date(Date.now() + +this.ACCESS_TOKEN_EXP * 60 * 1000),
+        httpOnly: false,
+      });
+
+      return {
+        status: 'success',
+        access_token,
+      };
     } catch (error) {
       throw new Error(error);
     }
