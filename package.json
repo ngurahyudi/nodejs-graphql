@@ -3,25 +3,33 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "yarn": "1.x"
+  },
   "scripts": {
     "prepare": "husky install",
     "prebuild": "rimraf dist",
     "build": "tsc -p tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "ts-node -r tsconfig-paths/register ./src/index.ts",
     "start:dev": "NODE_ENV=development nodemon",
+    "start:prod": "node dist/index",
     "format": "prettier --write \"src/**/*.ts\" \"__test__/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,__test__}/**/*.ts\" --fix",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:e2e": "NODE_ENV=test jest --config ./test/jest-e2e.json",
-    "sequelize": "sequelize"
+    "sequelize": "sequelize",
+    "migration:run": "sequelize db:migrate",
+    "seed:run": "sequelize db:seed:all",
+    "deploy": "yarn install --frozen-lockfile && yarn build && yarn start:prod"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-graphql": "^0.12.0",
@@ -39,6 +47,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.16",
     "@types/express-jwt": "^7.4.2",
     "@types/jest": "^29.4.0",
