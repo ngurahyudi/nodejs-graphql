@@ -1,2 +1,2 @@
 web: yarn start:prod
-release: yarn sequelize db:migrate && yarn sequelize db:seed:all
+release: npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all
