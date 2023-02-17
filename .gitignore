@@ -133,3 +133,5 @@ dist
 
 # App Notes
 notes/
+
+database.json
