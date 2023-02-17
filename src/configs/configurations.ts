@@ -2,7 +2,9 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 dotenv.config({
-  path: path.resolve(`${process.cwd()}/src/configs/env/.env`),
+  path: path.resolve(
+    `${process.cwd()}/src/configs/env/.env.${process.env.NODE_ENV}`,
+  ),
 });
 
 const configs = {
@@ -10,6 +12,12 @@ const configs = {
 
   // App configurations
   APP_PORT: process.env.APP_PORT || 3000,
+
+  APP_ACCESS_TOKEN_SECRET: process.env.APP_ACCESS_TOKEN_SECRET,
+  APP_ACCESS_TOKEN_EXP: process.env.APP_ACCESS_TOKEN_EXP,
+
+  APP_REFRESH_TOKEN_SECRET: process.env.APP_REFRESH_TOKEN_SECRET,
+  APP_REFRESH_TOKEN_EXP: process.env.APP_REFRESH_TOKEN_EXP,
 
   // Database configurations
   DB_HOST: process.env.DB_HOST || 'localhost',
