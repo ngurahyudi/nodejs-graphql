@@ -22,7 +22,6 @@
     "sequelize": "sequelize",
     "migration:run": "sequelize db:migrate",
     "seed:run": "sequelize db:seed:all",
-    "deploy": "yarn install --frozen-lockfile && yarn build && yarn start:prod"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
