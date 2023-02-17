@@ -21,7 +21,7 @@
     "test:e2e": "NODE_ENV=test jest --config ./test/jest-e2e.json",
     "sequelize": "sequelize",
     "migration:run": "sequelize db:migrate",
-    "seed:run": "sequelize db:seed:all",
+    "seed:run": "sequelize db:seed:all"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
