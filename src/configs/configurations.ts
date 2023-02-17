@@ -11,7 +11,7 @@ const configs = {
   NODE_ENV: process.env.NODE_ENV || 'development',
 
   // App configurations
-  APP_PORT: process.env.APP_PORT || 3000,
+  APP_PORT: process.env.PORT || 3000,
 
   APP_ACCESS_TOKEN_SECRET: process.env.APP_ACCESS_TOKEN_SECRET,
   APP_ACCESS_TOKEN_EXP: process.env.APP_ACCESS_TOKEN_EXP,
