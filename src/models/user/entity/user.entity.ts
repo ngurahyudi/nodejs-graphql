@@ -8,8 +8,8 @@ import {
   DataType,
   Default,
   IsEmail,
+  IsUUID,
   Model,
-  NotEmpty,
   PrimaryKey,
   Table,
   Unique,
@@ -19,32 +19,31 @@ import { RoleEnum } from '../enums';
 @Table({
   tableName: 'users',
   timestamps: true,
+  underscored: true,
   paranoid: true,
 })
 export default class User extends Model {
   @PrimaryKey
+  @IsUUID(4)
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
   id: string;
 
-  @NotEmpty
   @AllowNull(false)
   @Column(DataType.STRING(50))
   name: string;
 
-  @NotEmpty
   @IsEmail
   @Unique
   @AllowNull(false)
   @Column(DataType.STRING(50))
   email: string;
 
-  @NotEmpty
   @AllowNull(false)
   @Column(DataType.STRING(128))
   password: string;
 
-  @NotEmpty
+  @AllowNull(false)
   @Column(DataType.ARRAY(DataType.STRING))
   roles: RoleEnum[];
 
@@ -52,6 +51,7 @@ export default class User extends Model {
   @Column(DataType.STRING(128))
   refreshToken?: string;
 
+  @AllowNull(true)
   @Column(DataType.DATE)
   deletedAt?: Date;
 

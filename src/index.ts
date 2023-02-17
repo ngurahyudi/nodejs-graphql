@@ -11,9 +11,11 @@ import app from './app';
 const APP_PORT = configs.APP_PORT;
 
 app.listen(APP_PORT, async () => {
-  await sequelize.sync({
-    // force: true,
-  });
+  // await sequelize.sync({
+  //   force: true,
+  // });
+
+  await sequelize.authenticate();
 
   const schema = await buildSchema({
     resolvers: [
