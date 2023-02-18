@@ -18,12 +18,14 @@ export class UserResolver {
   }
 
   /* This is a query that takes in no arguments and returns an array of UserObjectType. */
+  @Authorized('ADMIN')
   @Query(() => [UserObjectType])
   async getUsers() {
     return await this.userService.find();
   }
 
   /* This is a query that takes in an argument of type string and returns an UserObjectType. */
+  @Authorized('ADMIN')
   @Query(() => UserObjectType)
   async findUser(@Arg('id') id: string) {
     return await this.userService.findOne(id);
@@ -36,6 +38,7 @@ export class UserResolver {
     return this.userService.signOut(ctx);
   }
 
+  @Authorized()
   @Query(() => SignInResponseType)
   async refreshAccessToken(@Ctx() ctx: AppContext) {
     return this.userService.refreshAccessToken(ctx);
@@ -55,6 +58,7 @@ UserObjectType. */
   }
 
   /* This is a mutation that takes in an argument of type string and returns a boolean. */
+  @Authorized()
   @Mutation((returns) => Boolean)
   async updateUser(
     @Arg('id') id: string,
@@ -64,6 +68,7 @@ UserObjectType. */
   }
 
   /* This is a mutation that takes in an argument of type string and returns a boolean. */
+  @Authorized('ADMIN')
   @Mutation(() => Boolean)
   async deleteUser(@Arg('id') id: string) {
     return await this.userService.delete(id);
