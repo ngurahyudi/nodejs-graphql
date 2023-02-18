@@ -41,3 +41,12 @@ $ yarn test
 # More script, see package.json
 
 ```
+
+Live example:
+
+- https://nodejs-graphql.herokuapp.com/graphiql (with GraphiQL)
+- https://nodejs-graphql.herokuapp.com/graphql
+
+signIn mutation
+username : admin@test.com
+password : Test123@
